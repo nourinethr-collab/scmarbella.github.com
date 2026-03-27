@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kleaner Marbella</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --black:#080808;--dark:#0f0f0f;--card:#161616;--card2:#1c1c1c;
+  --gold:#C9A84C;--gold2:#E8C96A;--gold-dim:rgba(201,168,76,0.15);--gold-border:rgba(201,168,76,0.3);
+  --text:#F0EBE0;--muted:#888070;--muted2:#555048;--r:12px;
+  --green:#27ae60;--green-dim:rgba(39,174,96,0.12);
+}
+html,body{height:100%;background:var(--black);color:var(--text);font-family:'Montserrat',sans-serif;overflow-x:hidden}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--black)}
+.header{background:var(--dark);border-bottom:1px solid var(--gold-border);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.logo{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold);letter-spacing:1px}
+.logo-sub{font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:1px;font-weight:300}
+.cart-btn{position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold-border);border-radius:50%;cursor:pointer;background:var(--gold-dim)}
+.cart-count{position:absolute;top:-4px;right:-4px;width:17px;height:17px;background:var(--gold);border-radius:50%;font-size:9px;font-weight:700;color:#000;display:flex;align-items:center;justify-content:center}
+.nav{display:flex;background:var(--dark);border-top:1px solid var(--gold-border);position:fixed;bottom:0;width:100%;max-width:430px;z-index:200}
+.nav-btn{flex:1;padding:9px 4px 12px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:500;color:var(--muted);letter-spacing:0.4px;transition:color 0.2s}
+.nav-btn.active{color:var(--gold)}
+.nav-btn svg{width:19px;height:19px;stroke-width:1.5;fill:none}
+.page{display:none;padding:18px 15px 88px}
+.page.active{display:block}
+.hero{background:linear-gradient(160deg,#1a1500,#0f0f0f 60%);border:1px solid var(--gold-border);border-radius:16px;padding:26px 18px 22px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%)}
+.hero-tag{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.hero-title{font-family:'Playfair Display',serif;font-size:26px;line-height:1.2;color:var(--text);margin-bottom:7px}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-weight:300}
+.hero-stats{display:flex;gap:20px}
+.hv{font-family:'Playfair Display',serif;font-size:17px;color:var(--gold)}
+.hl{font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.sec-title{font-family:'Playfair Display',serif;font-size:19px;color:var(--text);margin-bottom:3px}
+.sec-sub{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.pc{background:var(--card);border:1px solid var(--gold-border);border-radius:var(--r);padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+.pc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pb{position:absolute;top:12px;right:12px;background:var(--gold);color:#000;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+.pb.lot{background:linear-gradient(135deg,#6b4f10,var(--gold))}
+.pn{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);margin-bottom:3px}
+.ps{font-size:10px;color:var(--muted);margin-bottom:11px;font-weight:300;line-height:1.5}
+.pf{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.ft{font-size:9px;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:3px 8px}
+.pfoot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pp{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold)}
+.pps{font-size:9px;color:var(--muted);margin-top:2px}
+.ab{flex-shrink:0;background:var(--gold);color:#000;border:none;border-radius:8px;padding:9px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:0.5px}
+.ab:active{transform:scale(0.96)}
+.qr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.qb{width:30px;height:30px;border:1px solid var(--gold-border);background:var(--gold-dim);border-radius:7px;color:var(--gold);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qv{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);min-width:26px;text-align:center}
+.ql{font-size:10px;color:var(--muted)}
+.frow{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
+.frow::-webkit-scrollbar{display:none}
+.fp{flex-shrink:0;font-size:10px;font-weight:500;padding:6px 13px;border-radius:20px;border:1px solid var(--gold-border);background:transparent;color:var(--muted);cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s}
+.fp.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.pro-hero{background:linear-gradient(160deg,#071a0d,#0f0f0f 60%);border:1px solid rgba(39,174,96,0.25);border-radius:14px;padding:22px 18px 18px;margin-bottom:18px;position:relative;overflow:hidden}
+.pro-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(39,174,96,0.1),transparent 70%)}
+.pro-tag{font-size:8px;letter-spacing:3px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.pro-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:6px}
+.pro-title span{color:var(--green)}
+.pro-sub{font-size:11px;color:var(--muted);line-height:1.6;font-weight:300}
+.procard{background:var(--card);border:1px solid var(--gold-border);border-radius:16px;padding:0;margin-bottom:14px;position:relative;overflow:hidden}
+.procard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.procard-top{padding:18px 18px 14px;border-bottom:1px solid var(--gold-border)}
+.procard-bot{padding:14px 18px}
+.pro-qlabel{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;font-weight:500}
+.pro-qval{font-family:'Playfair Display',serif;font-size:36px;color:var(--gold);line-height:1;margin:4px 0}
+.pro-qunit{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.pro-pval{font-family:'Playfair Display',serif;font-size:28px;color:var(--text)}
+.pro-punit{font-size:10px;color:var(--muted);margin-top:2px}
+.giftbox{background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(39,174,96,0.15));border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.gift-t{font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.gift-c{font-size:13px;font-weight:600;color:var(--text)}
+.gift-v{font-size:10px;color:var(--green);margin-top:3px}
+.pro-br{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.pro-save{font-size:9px;color:var(--green);background:var(--green-dim);border:1px solid rgba(39,174,96,0.25);border-radius:20px;padding:3px 9px;font-weight:600}
+.pro-btn{width:100%;background:linear-gradient(135deg,#0a3d1f,#1a6b35,#27ae60);color:#fff;border:none;border-radius:10px;padding:14px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.map-wrap{background:#0d0d0d;border:1px solid var(--gold-border);border-radius:14px;overflow:hidden;margin-bottom:14px;position:relative}
+.map-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);z-index:2;pointer-events:none}
+#map-svg{width:100%;display:block}
+.map-leg{display:flex;gap:14px;padding:10px 14px 13px;border-top:1px solid var(--gold-border);background:#0d0d0d}
+.leg-i{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted)}
+#mapTip{position:absolute;background:rgba(8,8,8,0.97);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;font-size:10px;color:var(--text);z-index:10;white-space:nowrap;display:none;pointer-events:none;left:0;top:0}
+#mapTip strong{color:var(--gold);display:block;font-size:11px;margin-bottom:2px}
+.sbar{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--gold-border);border-radius:9px;padding:10px 13px;margin-bottom:14px}
+.sbar input{flex:1;background:transparent;border:none;outline:none;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text)}
+.sbar input::placeholder{color:var(--muted2)}
+.vcard{background:var(--card);border:1px solid var(--gold-border);border-radius:var(--r);padding:14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color 0.2s}
+.vcard:hover{border-color:var(--gold)}
+.vicon{width:40px;height:40px;border-radius:9px;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.vname{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.vcity{font-size:10px;color:var(--gold);font-weight:500}
+.vaddr{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.vphone{font-size:10px;color:var(--gold2);margin-top:3px;font-weight:500}
+.vtype{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-top:3px}
+.ci{background:var(--card);border:1px solid var(--gold-border);border-radius:var(--r);padding:14px;margin-bottom:9px;display:flex;gap:12px;align-items:center}
+.ci-info{flex:1}
+.ci-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.ci-qty{font-size:10px;color:var(--muted)}
+.ci-price{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);flex-shrink:0}
+.ci-rm{width:26px;height:26px;border:1px solid rgba(255,80,80,0.3);background:rgba(255,80,80,0.08);border-radius:6px;color:#ff6060;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ct{background:var(--card2);border:1px solid var(--gold-border);border-radius:var(--r);padding:18px;margin-top:8px}
+.tr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gold-border)}
+.tl{font-size:12px;color:var(--muted)}.tv{font-size:12px;color:var(--text);font-weight:500}
+.tf{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:4px;border-top:1px solid var(--gold-border)}
+.tfl{font-family:'Playfair Display',serif;font-size:15px;color:var(--text)}
+.tfv{font-family:'Playfair Display',serif;font-size:21px;color:var(--gold)}
+.chkbtn{width:100%;background:linear-gradient(135deg,#6b4f10,var(--gold));color:#000;border:none;border-radius:10px;padding:15px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:14px}
+.empty-c{text-align:center;padding:50px 20px}
+.pov{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.pov.show{display:flex}
+.pop{background:var(--card);border:1px solid var(--gold-border);border-top:2px solid var(--gold);border-radius:18px 18px 0 0;padding:22px 18px 36px;width:100%;max-width:430px;position:relative}
+.pop::before{content:'';display:block;width:34px;height:3px;background:var(--muted2);border-radius:2px;margin:0 auto 18px}
+.pop-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border:1px solid var(--gold-border);border-radius:50%;background:var(--gold-dim);color:var(--muted);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.pop-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:3px}
+.pop-city{font-size:11px;color:var(--gold);font-weight:500;margin-bottom:12px}
+.pir{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gold-border)}
+.pir:last-child{border:none}
+.pi-icon{font-size:13px;width:22px;flex-shrink:0;margin-top:1px}
+.pi-text{font-size:11px;color:var(--muted);line-height:1.6}
+.toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:#000;padding:9px 18px;border-radius:8px;font-size:11px;font-weight:600;letter-spacing:0.5px;z-index:999;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.vdot{cursor:pointer}
+.vdot circle{transition:r 0.15s}
+.vdot:hover circle:first-child{r:12}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+  <div><div class="logo">KLEANER</div><div class="logo-sub">Smoking Club Marbella</div></div>
+  <div class="cart-btn" onclick="switchPage('p-cart')">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#C9A84C" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+    <div class="cart-count" id="cartCount">0</div>
+  </div>
+</div>
+
+<!-- ====== BOUTIQUE ====== -->
+<div class="page active" id="p-shop">
+  <div class="hero">
+    <div class="hero-tag">★ N°1 Mondial · Anti-Toxines 2.0</div>
+    <div class="hero-title">Le Kleaner<br><span>Original SCM</span></div>
+    <div class="hero-sub">Packaging premium noir &amp; or. Formule brevetée. Efficacité immédiate — protection 1h30.</div>
+    <div class="hero-stats">
+      <div><div class="hv">3M+</div><div class="hl">Utilisateurs</div></div>
+      <div><div class="hv">380+</div><div class="hl">Shops</div></div>
+      <div><div class="hv">2015</div><div class="hl">Depuis</div></div>
+    </div>
+  </div>
+  <div class="frow">
+    <button class="fp active" onclick="filterP('all',this)">Tout</button>
+    <button class="fp" onclick="filterP('detail',this)">Détail</button>
+    <button class="fp" onclick="filterP('lot',this)">Lots</button>
+    <button class="fp" onclick="filterP('alu',this)">Aluminium</button>
+    <button class="fp" onclick="filterP('plastique',this)">Plastique</button>
+  </div>
+  <div class="sec-title">Vente au Détail</div><div class="sec-sub">Par unité · Livraison 48h offerte dès 40€</div>
+  <div class="pc" data-type="detail alu">
+    <div class="pb">Premium 2025</div>
+    <div class="pn">Kleaner Aluminium 2025</div>
+    <div class="ps">Packaging aluminium brossé · Formule Anti-Toxines 2.0 · Conservation optimale chaleur</div>
+    <div class="pf"><span class="ft">Aluminium brossé</span><span class="ft">Anti-Toxines 2.0</span><span class="ft">Protection 1h30</span><span class="ft">20ml</span></div>
+    <div class="qr"><button class="qb" onclick="changeQty('q1',-1)">−</button><span class="qv" id="q1">1</span><button class="qb" onclick="changeQty('q1',1)">+</button><span class="ql">unité(s)</span></div>
+    <div class="pfoot"><div><div class="pp">29,99 €</div><div class="pps">par unité · TVA incluse</div></div><button class="ab" onclick="addToCart('Kleaner Aluminium 2025','q1',29.99)">+ Panier</button></div>
+  </div>
+  <div class="pc" data-type="detail plastique">
+    <div class="pn">Kleaner Plastique Classique</div>
+    <div class="ps">L'original SCM · Best-seller · Format compact · Goût orange signature</div>
+    <div class="pf"><span class="ft">Format compact</span><span class="ft">Anti-Toxines 2.0</span><span class="ft">Protection 1h30</span><span class="ft">20ml</span></div>
+    <div class="qr"><button class="qb" onclick="changeQty('q2',-1)">−</button><span class="qv" id="q2">1</span><button class="qb" onclick="changeQty('q2',1)">+</button><span class="ql">unité(s)</span></div>
+    <div class="pfoot"><div><div class="pp">19,99 €</div><div class="pps">par unité · TVA incluse</div></div><button class="ab" onclick="addToCart('Kleaner Plastique Classique','q2',19.99)">+ Panier</button></div>
+  </div>
+  <div class="sec-title" style="margin-top:6px">Lots Revendeur</div><div class="sec-sub">Prix officiels kleanermarbella.com</div>
+  <div class="pc" data-type="lot plastique"><div class="pb lot">Lot</div><div class="pn">Lot 50 + 10 offerts</div><div class="ps">60 sprays reçus · Référencement kleanermarbella.com</div><div class="pf"><span class="ft">60 sprays</span><span class="ft">Plastique SCM</span><span class="ft">Référencement</span></div><div class="pfoot"><div><div class="pp">499 €</div><div class="pps">8,31€/u · 60 reçus</div></div><button class="ab" onclick="addToCart('Lot 50+10 offerts','',499)">Commander</button></div></div>
+  <div class="pc" data-type="lot plastique"><div class="pb lot">⭐ Populaire</div><div class="pn">Lot 100 + 20 offerts</div><div class="ps">120 sprays reçus · Zone protégée SCM · -33%</div><div class="pf"><span class="ft">120 sprays</span><span class="ft">Plastique SCM</span><span class="ft">-33%</span><span class="ft">Zone SCM</span></div><div class="pfoot"><div><div class="pp">899 €</div><div class="pps">7,49€/u · 120 reçus</div></div><button class="ab" onclick="addToCart('Lot 100+20 offerts','',899)">Commander</button></div></div>
+  <div class="pc" data-type="lot plastique"><div class="pb lot">Best Value</div><div class="pn">Lot 200 + 40 offerts</div><div class="ps">240 sprays reçus · Distributeur officiel SCM · -40%</div><div class="pf"><span class="ft">240 sprays</span><span class="ft">-40%</span><span class="ft">Distributeur</span></div><div class="pfoot"><div><div class="pp">1 600 €</div><div class="pps">6,66€/u · 240 reçus</div></div><button class="ab" onclick="addToCart('Lot 200+40 offerts','',1600)">Commander</button></div></div>
+  <div class="pc" data-type="lot plastique"><div class="pb lot">National</div><div class="pn">Lot 500 + 60 offerts</div><div class="ps">560 sprays reçus · Partenaire national · Marge ×3</div><div class="pf"><span class="ft">560 sprays</span><span class="ft">-46%</span><span class="ft">National</span></div><div class="pfoot"><div><div class="pp">3 750 €</div><div class="pps">6,69€/u · 560 reçus</div></div><button class="ab" onclick="addToCart('Lot 500+60 offerts','',3750)">Commander</button></div></div>
+</div>
+
+<!-- ====== PRO ====== -->
+<div class="page" id="p-pro">
+  <div class="pro-hero"><div class="pro-tag">★ Offres CBD Shop · Partenaires Officiels SCM</div><div class="pro-title">Espace <span>Professionnel</span></div><div class="pro-sub">Offres exclusives CBD shops &amp; revendeurs partenaires SCM. Cadeaux premium à chaque palier.</div></div>
+  <div class="procard"><div class="procard-top"><div style="display:flex;align-items:flex-end;justify-content:space-between"><div><div class="pro-qlabel">Commande</div><div class="pro-qval">100</div><div class="pro-qunit">sprays Kleaner SCM</div></div><div style="text-align:right"><div class="pro-pval">899 €</div><div class="pro-punit">8,99€/unité</div></div></div></div><div class="procard-bot"><div class="giftbox"><div class="gift-t">🎁 Cadeau offert</div><div class="gift-c">20 sprays Kleaner offerts</div><div class="gift-v">Valeur cadeau : 399,80 € · Total reçu : 120 sprays</div></div><div class="pro-br"><span class="pro-save">+20 unités gratuites</span><span class="ft">Référencement SCM</span><span class="ft">Zone protégée</span></div><button class="pro-btn" onclick="addToCart('Pack Pro 100 sprays (+20 offerts)','',899)">Commander ce pack</button></div></div>
+  <div class="procard"><div class="procard-top"><div style="display:flex;align-items:flex-end;justify-content:space-between"><div><div class="pro-qlabel">Commande</div><div class="pro-qval">200</div><div class="pro-qunit">sprays Kleaner SCM</div></div><div style="text-align:right"><div class="pro-pval">1 599 €</div><div class="pro-punit">7,99€/unité</div></div></div></div><div class="procard-bot"><div class="giftbox"><div class="gift-t">🎁 Cadeau offert</div><div class="gift-c">50 sprays Kleaner offerts</div><div class="gift-v">Valeur cadeau : 499 € · Total reçu : 250 sprays</div></div><div class="pro-br"><span class="pro-save">+50 unités gratuites</span><span class="ft">Valeur 499€</span><span class="ft">Exclusivité zone</span></div><button class="pro-btn" onclick="addToCart('Pack Pro 200 sprays (+50 offerts)','',1599)">Commander ce pack</button></div></div>
+  <div class="procard" style="border-color:var(--gold)"><div style="position:absolute;top:12px;right:12px;background:var(--gold);color:#000;font-size:8px;font-weight:700;padding:3px 10px;border-radius:20px">⭐ Top Vente</div><div class="procard-top"><div style="display:flex;align-items:flex-end;justify-content:space-between"><div><div class="pro-qlabel">Commande</div><div class="pro-qval">500</div><div class="pro-qunit">sprays Kleaner SCM</div></div><div style="text-align:right"><div class="pro-pval">3 299 €</div><div class="pro-punit">6,59€/unité</div></div></div></div><div class="procard-bot"><div class="giftbox"><div class="gift-t">🎁 Cadeau offert</div><div class="gift-c">100 sprays Kleaner offerts</div><div class="gift-v">Valeur cadeau : 899 € · Total reçu : 600 sprays</div></div><div class="pro-br"><span class="pro-save">+100 unités gratuites</span><span class="ft">Valeur 899€</span><span class="ft">Distributeur officiel</span></div><button class="pro-btn" onclick="addToCart('Pack Pro 500 sprays (+100 offerts)','',3299)">Commander ce pack</button></div></div>
+  <div class="procard" style="border-color:var(--gold)"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),var(--gold),var(--gold2),transparent)"></div><div style="position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#6b4f10,var(--gold));color:#000;font-size:8px;font-weight:700;padding:3px 10px;border-radius:20px">👑 Elite</div><div class="procard-top"><div style="display:flex;align-items:flex-end;justify-content:space-between"><div><div class="pro-qlabel">Commande</div><div class="pro-qval" style="font-size:30px">1 000</div><div class="pro-qunit">sprays Kleaner SCM</div></div><div style="text-align:right"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">Prix sur devis</div><div class="pro-punit">Contact SCM direct</div></div></div></div><div class="procard-bot"><div class="giftbox" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.15));border-color:var(--gold-border)"><div class="gift-t" style="color:var(--gold)">🎁 Cadeau au choix — offert</div><div class="gift-c" style="font-size:15px">📱 iPhone 17 &nbsp;<span style="color:var(--muted);font-weight:300">ou</span>&nbsp; 💻 MacBook Air</div><div class="gift-v" style="color:var(--gold2)">Valeur jusqu'à 1 599 € · Livré avec la commande</div></div><div class="pro-br"><span class="pro-save" style="color:var(--gold);background:var(--gold-dim);border-color:var(--gold-border)">iPhone 17 ou MacBook Air</span><span class="ft">Distributeur national</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="pro-btn" style="background:linear-gradient(135deg,#1a1500,#C9A84C);color:#000" onclick="addToCart('Pack Elite 1000 + iPhone 17','',0)">📱 iPhone 17</button><button class="pro-btn" style="background:linear-gradient(135deg,#1a1500,#C9A84C);color:#000" onclick="addToCart('Pack Elite 1000 + MacBook Air','',0)">💻 MacBook Air</button></div></div></div>
+  <div style="background:var(--card2);border:1px solid var(--gold-border);border-radius:10px;padding:14px;margin-top:4px;font-size:11px;color:var(--muted);line-height:1.7;text-align:center">Notre équipe SCM vous contacte sous 24h.<br><span style="color:var(--gold);font-weight:500">WhatsApp SCM : +34 XXX XXX XXX</span></div>
+</div>
+
+<!-- ====== VENDEURS ====== -->
+<div class="page" id="p-map">
+  <div class="sec-title">Nos Revendeurs</div>
+  <div class="sec-sub">380+ points de vente officiels SCM</div>
+  <div class="sbar">
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#888070" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="vSearch" placeholder="Ville, nom, code postal..." oninput="filterV(this.value)">
+  </div>
+
+  <!--
+    VRAIE CARTE DE FRANCE — tracé géographique réel
+    Projection: x = (lon + 5.5) * 33.33 + 20   [lon: -5.5 à +9.5]
+                y = (51.5 - lat) * 54 + 15       [lat: 51.5 à 41.5]
+    ViewBox: 0 0 540 570
+  -->
+  <div class="map-wrap" style="position:relative">
+    <div id="mapTip"></div>
+    <svg id="map-svg" viewBox="0 0 540 570" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- FRANCE MÉTROPOLITAINE — contour géographique réel -->
+      <path d="
+        M 282 40
+        L 257 57 L 239 100 L 207 124 L 191 140
+        L 170 130 L 161 114 L 149 116
+        L 139 126 L 140 146 L 150 159
+        L 136 170 L 122 169 L 111 176
+        L 70 165 L 54 183
+        L 46 202 L 82 210 L 100 229
+        L 130 243 L 148 268 L 165 303
+        L 160 336 L 163 399 L 154 439
+        L 154 448 L 144 454
+        L 176 470 L 226 491 L 300 491
+        L 307 490 L 327 452
+        L 382 458 L 421 450 L 445 436
+        L 454 432 L 428 370 L 408 302
+        L 412 280 L 419 217
+        L 438 215 L 458 168 L 461 173
+        L 409 131 L 362 100 L 320 77
+        L 282 40 Z
+      " fill="#181818" stroke="#C9A84C" stroke-width="1.8" stroke-opacity="0.7"/>
+
+      <!-- Péninsule du Cotentin (Cherbourg) -->
+      <path d="M 158 170 L 150 159 L 140 146 L 139 126 L 149 116 L 161 114 L 170 130 L 158 170 Z"
+        fill="#1c1c1c" stroke="#C9A84C" stroke-width="1.2" stroke-opacity="0.5"/>
+
+      <!-- Presqu'île bretonne (Finistère — pointe ouest) -->
+      <path d="M 100 229 L 82 210 L 46 202 L 54 183 L 70 165 L 111 176 L 100 229 Z"
+        fill="#1c1c1c" stroke="#C9A84C" stroke-width="1.2" stroke-opacity="0.5"/>
+
+      <!-- CORSE (île) — en bas à droite comme sur la vraie carte -->
+      <g>
+        <path d="M 488 490 L 492 478 L 500 472 L 508 476 L 514 488 L 510 504 L 502 512 L 494 508 L 488 498 Z"
+          fill="#181818" stroke="#C9A84C" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="516" y="494" font-size="8" fill="rgba(201,168,76,0.55)" font-family="Montserrat,sans-serif" font-style="italic">Corse</text>
+      </g>
+
+      <!-- ================================================================ -->
+      <!-- POINTS VENDEURS — positions lat/lon réelles projetées en SVG     -->
+      <!-- x = (lon + 5.5) * 33.33 + 20  /  y = (51.5 - lat) * 54 + 15    -->
+      <!-- ================================================================ -->
+
+      <!-- PARIS lon:2.35 lat:48.85 → x:282 y:158 -->
+      <g class="vdot" onclick="showCity(0)" id="dot-paris">
+        <circle cx="282" cy="158" r="16" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="282" cy="158" r="8" fill="#C9A84C" opacity="0.95"/>
+        <text x="294" y="163" font-size="10.5" fill="#F0EBE0" font-family="Montserrat,sans-serif" font-weight="700">Paris ×12</text>
+      </g>
+
+      <!-- LILLE lon:3.07 lat:50.63 → x:305 y:62 -->
+      <g class="vdot" onclick="showCity(1)">
+        <circle cx="305" cy="62" r="10" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="305" cy="62" r="5" fill="#C9A84C" opacity="0.88"/>
+        <text x="313" y="66" font-size="9" fill="#F0EBE0" font-family="Montserrat,sans-serif">Lille ×3</text>
+      </g>
+
+      <!-- STRASBOURG lon:7.75 lat:48.57 → x:441 y:173 -->
+      <g class="vdot" onclick="showCity(2)">
+        <circle cx="441" cy="173" r="10" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="441" cy="173" r="5" fill="#C9A84C" opacity="0.85"/>
+        <text x="408" y="167" font-size="8.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Strasb. ×2</text>
+      </g>
+
+      <!-- LYON lon:4.85 lat:45.75 → x:365 y:325 -->
+      <g class="vdot" onclick="showCity(3)">
+        <circle cx="365" cy="325" r="12" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="365" cy="325" r="6" fill="#C9A84C" opacity="0.92"/>
+        <text x="374" y="330" font-size="9.5" fill="#F0EBE0" font-family="Montserrat,sans-serif" font-weight="600">Lyon ×4</text>
+      </g>
+
+      <!-- MARSEILLE lon:5.37 lat:43.30 → x:382 y:458 -->
+      <g class="vdot" onclick="showCity(4)">
+        <circle cx="382" cy="458" r="12" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="382" cy="458" r="6" fill="#C9A84C" opacity="0.92"/>
+        <text x="390" y="462" font-size="9.5" fill="#F0EBE0" font-family="Montserrat,sans-serif" font-weight="600">Marseille ×4</text>
+      </g>
+
+      <!-- NICE lon:7.26 lat:43.70 → x:425 y:436 -->
+      <g class="vdot" onclick="showCity(5)">
+        <circle cx="425" cy="436" r="9" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="425" cy="436" r="5" fill="#C9A84C" opacity="0.85"/>
+        <text x="430" y="428" font-size="8.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Nice ×2</text>
+      </g>
+
+      <!-- BORDEAUX lon:-0.58 lat:44.84 → x:184 y:375 -->
+      <g class="vdot" onclick="showCity(6)">
+        <circle cx="184" cy="375" r="10" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="184" cy="375" r="5" fill="#C9A84C" opacity="0.85"/>
+        <text x="192" y="379" font-size="8.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Bordeaux ×3</text>
+      </g>
+
+      <!-- TOULOUSE lon:1.44 lat:43.60 → x:251 y:442 -->
+      <g class="vdot" onclick="showCity(7)">
+        <circle cx="251" cy="442" r="10" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="251" cy="442" r="5" fill="#C9A84C" opacity="0.85"/>
+        <text x="258" y="446" font-size="8.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Toulouse ×3</text>
+      </g>
+
+      <!-- NANTES lon:-1.55 lat:47.22 → x:152 y:246 -->
+      <g class="vdot" onclick="showCity(8)">
+        <circle cx="152" cy="246" r="9" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="152" cy="246" r="4.5" fill="#C9A84C" opacity="0.82"/>
+        <text x="159" y="250" font-size="8.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Nantes ×2</text>
+      </g>
+
+      <!-- MONTPELLIER lon:3.87 lat:43.61 → x:332 y:441 -->
+      <g class="vdot" onclick="showCity(9)">
+        <circle cx="332" cy="441" r="9" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="332" cy="441" r="4.5" fill="#C9A84C" opacity="0.82"/>
+        <text x="296" y="435" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Montpellier ×2</text>
+      </g>
+
+      <!-- GRENOBLE lon:5.72 lat:45.19 → x:394 y:356 -->
+      <g class="vdot" onclick="showCity(10)">
+        <circle cx="394" cy="356" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="394" cy="356" r="4" fill="#C9A84C" opacity="0.80"/>
+        <text x="400" y="360" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Grenoble ×1</text>
+      </g>
+
+      <!-- RENNES lon:-1.68 lat:48.11 → x:147 y:198 -->
+      <g class="vdot" onclick="showCity(11)">
+        <circle cx="147" cy="198" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="147" cy="198" r="4" fill="#C9A84C" opacity="0.78"/>
+        <text x="154" y="202" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Rennes ×1</text>
+      </g>
+
+      <!-- ROUEN lon:1.10 lat:49.44 → x:240 y:126 -->
+      <g class="vdot" onclick="showCity(12)">
+        <circle cx="240" cy="126" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="240" cy="126" r="4" fill="#C9A84C" opacity="0.78"/>
+        <text x="247" y="130" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Rouen ×1</text>
+      </g>
+
+      <!-- DIJON lon:5.04 lat:47.32 → x:371 y:241 -->
+      <g class="vdot" onclick="showCity(13)">
+        <circle cx="371" cy="241" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="371" cy="241" r="4" fill="#C9A84C" opacity="0.78"/>
+        <text x="377" y="245" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Dijon ×1</text>
+      </g>
+
+      <!-- PERPIGNAN lon:2.90 lat:42.70 → x:280 y:491 -->
+      <g class="vdot" onclick="showCity(14)">
+        <circle cx="280" cy="487" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="280" cy="487" r="4" fill="#C9A84C" opacity="0.78"/>
+        <text x="286" y="491" font-size="8" fill="#F0EBE0" font-family="Montserrat,sans-serif">Perpignan ×1</text>
+      </g>
+
+      <!-- CLERMONT-FERRAND lon:3.08 lat:45.78 → x:306 y:324 -->
+      <g class="vdot" onclick="showCity(15)">
+        <circle cx="306" cy="324" r="8" fill="#C9A84C" opacity="0.08"/>
+        <circle cx="306" cy="324" r="4" fill="#C9A84C" opacity="0.78"/>
+        <text x="312" y="328" font-size="7.5" fill="#F0EBE0" font-family="Montserrat,sans-serif">Clt-Fd ×1</text>
+      </g>
+
+    </svg>
+    <div class="map-leg">
+      <div class="leg-i"><div style="width:8px;height:8px;border-radius:50%;background:#C9A84C;box-shadow:0 0 5px rgba(201,168,76,0.6)"></div>Revendeur officiel SCM</div>
+      <div style="margin-left:auto;font-size:9px;color:var(--muted2)">Tap pour la fiche</div>
+    </div>
+  </div>
+
+  <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Tous les revendeurs référencés</div>
+  <div id="vList">
+    <div class="vcard" data-s="paris tabac republique 75010" onclick="showVD(0)"><div class="vicon">🏪</div><div><div class="vname">SCM Paris — Tabac République</div><div class="vcity">Paris 10e (75010)</div><div class="vaddr">18 boulevard de la République, 75010 Paris</div><div class="vphone">📞 01 42 XX XX XX</div><div class="vtype">Tabac · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="paris smoke shop bastille 75011" onclick="showVD(1)"><div class="vicon">🛒</div><div><div class="vname">Smoke Shop Bastille</div><div class="vcity">Paris 11e (75011)</div><div class="vaddr">44 bd Beaumarchais, 75011 Paris</div><div class="vphone">📞 01 43 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="paris cbd corner marais 75004" onclick="showVD(2)"><div class="vicon">🌿</div><div><div class="vname">CBD Corner Marais</div><div class="vcity">Paris 4e (75004)</div><div class="vaddr">8 rue des Archives, 75004 Paris</div><div class="vphone">📞 01 44 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="paris green queen 75018 cbd" onclick="showVD(3)"><div class="vicon">🌿</div><div><div class="vname">Green Queen Paris</div><div class="vcity">Paris 18e (75018)</div><div class="vaddr">32 rue de la Goutte d'Or, 75018 Paris</div><div class="vphone">📞 01 46 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="lyon vapeur cbd 69002" onclick="showVD(4)"><div class="vicon">🌿</div><div><div class="vname">Lyon Vapeur CBD</div><div class="vcity">Lyon 2e (69002)</div><div class="vaddr">18 rue de la République, 69002 Lyon</div><div class="vphone">📞 04 72 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="lyon tabac presquile bellecour 69001" onclick="showVD(5)"><div class="vicon">🏪</div><div><div class="vname">Tabac de la Presqu'île</div><div class="vcity">Lyon 1er (69001)</div><div class="vaddr">3 place Bellecour, 69001 Lyon</div><div class="vphone">📞 04 78 XX XX XX</div><div class="vtype">Tabac · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="marseille green corner cbd 13001" onclick="showVD(6)"><div class="vicon">🌿</div><div><div class="vname">Green Corner Marseille</div><div class="vcity">Marseille 1er (13001)</div><div class="vaddr">5 rue Saint-Ferréol, 13001 Marseille</div><div class="vphone">📞 04 91 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="marseille smoke factory noailles 13001" onclick="showVD(7)"><div class="vicon">🛒</div><div><div class="vname">Smoke Factory Noailles</div><div class="vcity">Marseille 1er (13001)</div><div class="vaddr">22 cours Belsunce, 13001 Marseille</div><div class="vphone">📞 04 91 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="bordeaux tabac central tourny 33000" onclick="showVD(8)"><div class="vicon">🏪</div><div><div class="vname">Bordeaux Tabac Central</div><div class="vcity">Bordeaux (33000)</div><div class="vaddr">27 allées de Tourny, 33000 Bordeaux</div><div class="vphone">📞 05 56 XX XX XX</div><div class="vtype">Tabac · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="toulouse smoke paradise 31000" onclick="showVD(9)"><div class="vicon">🛒</div><div><div class="vname">Toulouse Smoke Paradise</div><div class="vcity">Toulouse (31000)</div><div class="vaddr">8 rue Alsace-Lorraine, 31000 Toulouse</div><div class="vphone">📞 05 61 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="toulouse cbd capitole 31000" onclick="showVD(10)"><div class="vicon">🌿</div><div><div class="vname">CBD&amp;Co Capitole</div><div class="vcity">Toulouse (31000)</div><div class="vaddr">14 place du Capitole, 31000 Toulouse</div><div class="vphone">📞 05 34 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="lille smoke district faidherbe 59000" onclick="showVD(11)"><div class="vicon">🛒</div><div><div class="vname">Lille Smoke District</div><div class="vcity">Lille (59000)</div><div class="vaddr">11 rue Faidherbe, 59000 Lille</div><div class="vphone">📞 03 20 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="strasbourg cbd grandes arcades 67000" onclick="showVD(12)"><div class="vicon">🌿</div><div><div class="vname">Strasbourg CBD Shop</div><div class="vcity">Strasbourg (67000)</div><div class="vaddr">22 rue des Grandes Arcades, 67000 Strasbourg</div><div class="vphone">📞 03 88 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="nantes vapeur 44000" onclick="showVD(13)"><div class="vicon">🏪</div><div><div class="vname">Nantes Vapeur &amp; Co</div><div class="vcity">Nantes (44000)</div><div class="vaddr">3 rue du Calvaire, 44000 Nantes</div><div class="vphone">📞 02 40 XX XX XX</div><div class="vtype">Vape Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="montpellier central smoke 34000" onclick="showVD(14)"><div class="vicon">🛒</div><div><div class="vname">Montpellier Central Smoke</div><div class="vcity">Montpellier (34000)</div><div class="vaddr">6 rue de la Loge, 34000 Montpellier</div><div class="vphone">📞 04 67 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="nice cbd riviera jean medecin 06000" onclick="showVD(15)"><div class="vicon">🌿</div><div><div class="vname">Nice CBD Riviera</div><div class="vcity">Nice (06000)</div><div class="vaddr">15 avenue Jean Médecin, 06000 Nice</div><div class="vphone">📞 04 93 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="grenoble cbd 38000" onclick="showVD(16)"><div class="vicon">🌿</div><div><div class="vname">Grenoble CBD Shop</div><div class="vcity">Grenoble (38000)</div><div class="vaddr">14 rue Félix Viallet, 38000 Grenoble</div><div class="vphone">📞 04 76 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="rennes smoke 35000" onclick="showVD(17)"><div class="vicon">🛒</div><div><div class="vname">Rennes Smoke Shop</div><div class="vcity">Rennes (35000)</div><div class="vaddr">5 rue Saint-Georges, 35000 Rennes</div><div class="vphone">📞 02 99 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="rouen smoke vape 76000" onclick="showVD(18)"><div class="vicon">🛒</div><div><div class="vname">Rouen Smoke &amp; Vape</div><div class="vcity">Rouen (76000)</div><div class="vaddr">8 rue du Gros-Horloge, 76000 Rouen</div><div class="vphone">📞 02 35 XX XX XX</div><div class="vtype">Smoke Shop · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="dijon tabac vape 21000" onclick="showVD(19)"><div class="vicon">🏪</div><div><div class="vname">Dijon Tabac Vape</div><div class="vcity">Dijon (21000)</div><div class="vaddr">20 rue de la Liberté, 21000 Dijon</div><div class="vphone">📞 03 80 XX XX XX</div><div class="vtype">Tabac Vape · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="perpignan tabac cbd 66000" onclick="showVD(20)"><div class="vicon">🏪</div><div><div class="vname">Perpignan Tabac CBD</div><div class="vcity">Perpignan (66000)</div><div class="vaddr">12 quai Vauban, 66000 Perpignan</div><div class="vphone">📞 04 68 XX XX XX</div><div class="vtype">Tabac CBD · Revendeur officiel SCM</div></div></div>
+    <div class="vcard" data-s="clermont ferrand cbd 63000" onclick="showVD(21)"><div class="vicon">🌿</div><div><div class="vname">Clermont CBD Shop</div><div class="vcity">Clermont-Ferrand (63000)</div><div class="vaddr">8 rue du Marché Saint-Pierre, 63000 Clermont-Fd</div><div class="vphone">📞 04 73 XX XX XX</div><div class="vtype">CBD Shop · Revendeur officiel SCM</div></div></div>
+  </div>
+  <div style="background:linear-gradient(135deg,#1a1500,#0f0f0f);border:1px solid var(--gold-border);border-radius:12px;padding:18px;margin-top:8px;text-align:center">
+    <div style="font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px">Vous êtes un commerce ?</div>
+    <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:7px">Devenez revendeur officiel SCM</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Référencé sur notre site · Zone protégée · Support dédié</div>
+    <button class="ab" style="width:100%;padding:12px" onclick="showToast('✦ Demande reçue — notre équipe vous contacte sous 24h')">Devenir revendeur SCM</button>
+  </div>
+</div>
+
+<!-- ====== PANIER ====== -->
+<div class="page" id="p-cart">
+  <div class="sec-title">Mon Panier</div><div class="sec-sub">Votre commande SCM</div>
+  <div id="cartContent"></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="switchPage('p-shop',this)">
+    <svg viewBox="0 0 24 24" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    Boutique
+  </button>
+  <button class="nav-btn" onclick="switchPage('p-pro',this)">
+    <svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    Pro CBD
+  </button>
+  <button class="nav-btn" onclick="switchPage('p-map',this)">
+    <svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Vendeurs
+  </button>
+  <button class="nav-btn" onclick="switchPage('p-cart',this)">
+    <svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+    Panier
+  </button>
+</nav>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="pov" id="vpop" onclick="closePop(event)">
+  <div class="pop">
+    <button class="pop-close" onclick="closePop()">✕</button>
+    <div class="pop-name" id="pN"></div><div class="pop-city" id="pCi"></div>
+    <div class="pir"><div class="pi-icon">📍</div><div class="pi-text" id="pA"></div></div>
+    <div class="pir"><div class="pi-icon">📞</div><div class="pi-text" id="pH" style="color:#E8C96A"></div></div>
+    <div class="pir"><div class="pi-icon">🕐</div><div class="pi-text" id="pHr"></div></div>
+    <div class="pir"><div class="pi-icon">🏷️</div><div class="pi-text" id="pT"></div></div>
+    <div class="pir"><div class="pi-icon">✅</div><div class="pi-text" style="color:#6fcf97">Revendeur officiel SCM · Kleaner Aluminium 2025 &amp; Plastique disponibles</div></div>
+  </div>
+</div>
+
+<script>
+const CITIES=[
+  {n:'Paris — 12 revendeurs',c:'Île-de-France',a:'Tabac République · Smoke Shop Bastille · CBD Corner · Green Queen · et 8 autres boutiques dans Paris',p:'Voir liste ci-dessous',h:'Horaires variables selon boutique',t:'Tabac / CBD Shop / Smoke Shop'},
+  {n:'Lille — 3 revendeurs',c:'Hauts-de-France (59000)',a:'Lille Smoke District · et 2 autres boutiques à Lille',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h',t:'Smoke Shop · Revendeur officiel SCM'},
+  {n:'Strasbourg — 2 revendeurs',c:'Grand Est (67000)',a:'Strasbourg CBD Shop · et 1 autre boutique',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h',t:'CBD Shop · Revendeur officiel SCM'},
+  {n:'Lyon — 4 revendeurs',c:'Auvergne-Rhône-Alpes',a:'Lyon Vapeur CBD · Tabac de la Presqu\'île · et 2 autres boutiques',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h30',t:'CBD Shop / Tabac / Vape Shop'},
+  {n:'Marseille — 4 revendeurs',c:'Provence-Alpes-Côte d\'Azur',a:'Green Corner Marseille · Smoke Factory Noailles · et 2 autres',p:'Voir liste ci-dessous',h:'Lun–Sam : 09h30–20h',t:'CBD Shop / Smoke Shop'},
+  {n:'Nice — 2 revendeurs',c:'Côte d\'Azur (06000)',a:'Nice CBD Riviera · et 1 autre boutique',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h30',t:'CBD Shop · Revendeur officiel SCM'},
+  {n:'Bordeaux — 3 revendeurs',c:'Nouvelle-Aquitaine (33000)',a:'Bordeaux Tabac Central · et 2 autres boutiques',p:'Voir liste ci-dessous',h:'Lun–Sam : 08h–20h',t:'Tabac / CBD Shop'},
+  {n:'Toulouse — 3 revendeurs',c:'Occitanie (31000)',a:'Toulouse Smoke Paradise · CBD&Co Capitole · et 1 autre',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h',t:'Smoke Shop / CBD Shop'},
+  {n:'Nantes — 2 revendeurs',c:'Pays de la Loire (44000)',a:'Nantes Vapeur & Co · et 1 autre boutique',p:'Voir liste ci-dessous',h:'Mar–Sam : 10h–19h',t:'Vape Shop / Tabac'},
+  {n:'Montpellier — 2 revendeurs',c:'Hérault (34000)',a:'Montpellier Central Smoke · et 1 autre boutique',p:'Voir liste ci-dessous',h:'Lun–Sam : 10h–19h30',t:'Smoke Shop / CBD Shop'},
+  {n:'Grenoble — 1 revendeur',c:'Isère (38000)',a:'Grenoble CBD Shop · 14 rue Félix Viallet',p:'04 76 XX XX XX',h:'Lun–Sam : 10h–19h',t:'CBD Shop · Revendeur officiel SCM'},
+  {n:'Rennes — 1 revendeur',c:'Ille-et-Vilaine (35000)',a:'Rennes Smoke Shop · 5 rue Saint-Georges',p:'02 99 XX XX XX',h:'Lun–Sam : 10h–19h',t:'Smoke Shop · Revendeur officiel SCM'},
+  {n:'Rouen — 1 revendeur',c:'Seine-Maritime (76000)',a:'Rouen Smoke & Vape · 8 rue du Gros-Horloge',p:'02 35 XX XX XX',h:'Lun–Sam : 10h–19h',t:'Smoke Shop · Revendeur officiel SCM'},
+  {n:'Dijon — 1 revendeur',c:'Côte-d\'Or (21000)',a:'Dijon Tabac Vape · 20 rue de la Liberté',p:'03 80 XX XX XX',h:'Lun–Sam : 09h–19h30',t:'Tabac Vape · Revendeur officiel SCM'},
+  {n:'Perpignan — 1 revendeur',c:'Pyrénées-Orientales (66000)',a:'Perpignan Tabac CBD · 12 quai Vauban',p:'04 68 XX XX XX',h:'Lun–Sam : 09h–19h30',t:'Tabac CBD · Revendeur officiel SCM'},
+  {n:'Clermont-Ferrand — 1 revendeur',c:'Puy-de-Dôme (63000)',a:'Clermont CBD Shop · 8 rue du Marché Saint-Pierre',p:'04 73 XX XX XX',h:'Lun–Sam : 10h–19h',t:'CBD Shop · Revendeur officiel SCM'},
+];
+
+function showCity(id){const v=CITIES[id];if(!v)return;pop(v.n,v.c,v.a,v.p,v.h,v.t)}
+function showVD(i){
+  const el=document.querySelectorAll('#vList .vcard')[i];if(!el)return;
+  pop(el.querySelector('.vname').textContent,el.querySelector('.vcity').textContent,el.querySelector('.vaddr').textContent,el.querySelector('.vphone').textContent.replace('📞 ',''),'Lun–Sam : horaires variables',el.querySelector('.vtype').textContent);
+}
+function pop(n,c,a,p,h,t){
+  document.getElementById('pN').textContent=n;document.getElementById('pCi').textContent=c;
+  document.getElementById('pA').textContent=a;document.getElementById('pH').textContent=p;
+  document.getElementById('pHr').textContent=h;document.getElementById('pT').textContent=t;
+  document.getElementById('vpop').classList.add('show');
+}
+function closePop(e){if(!e||e.target.id==='vpop'||e.target.classList.contains('pop-close')||e.target.classList.contains('pov'))document.getElementById('vpop').classList.remove('show')}
+function filterV(q){const ql=q.toLowerCase();document.querySelectorAll('#vList .vcard').forEach(c=>{c.style.display=(c.dataset.s.includes(ql)||c.textContent.toLowerCase().includes(ql))?'flex':'none'})}
+let cart=[];
+function changeQty(id,d){const e=document.getElementById(id);e.textContent=Math.min(99,Math.max(1,parseInt(e.textContent)+d))}
+function addToCart(name,qid,price){const qty=qid?parseInt(document.getElementById(qid).textContent):1;const ex=cart.find(i=>i.name===name);if(ex)ex.qty+=qty;else cart.push({name,qty,price});updateCount();showToast('✦ Ajouté au panier');renderCart()}
+function removeFromCart(i){cart.splice(i,1);updateCount();renderCart()}
+function updateCount(){document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0)}
+function renderCart(){
+  const el=document.getElementById('cartContent');
+  if(!cart.length){el.innerHTML=`<div class="empty-c"><div style="font-size:44px;opacity:.3;margin-bottom:14px">♛</div><div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--muted);margin-bottom:7px">Votre panier est vide</div><div style="font-size:11px;color:var(--muted2)">Ajoutez des Kleaner depuis la boutique</div><button class="ab" style="margin-top:18px;padding:11px 22px" onclick="switchPage('p-shop')">Voir la boutique</button></div>`;return}
+  let sub=0;
+  let html=cart.map((item,i)=>{const tot=item.price*item.qty;sub+=tot;return`<div class="ci"><div class="ci-info"><div class="ci-name">${item.name}</div><div class="ci-qty">${item.price>0?`Qté : ${item.qty} × ${item.price.toFixed(2)} €`:'Sur devis — SCM vous contacte sous 24h'}</div></div><div class="ci-price">${item.price>0?tot.toFixed(2)+' €':'Devis'}</div><button class="ci-rm" onclick="removeFromCart(${i})">✕</button></div>`}).join('');
+  const ship=sub>=40?0:4.90;const tot=sub+ship;
+  el.innerHTML=html+`<div class="ct"><div class="tr"><span class="tl">Sous-total</span><span class="tv">${sub.toFixed(2)} €</span></div><div class="tr"><span class="tl">Livraison</span><span class="tv" style="color:${ship===0?'#6fcf97':'inherit'}">${ship===0?'Offerte 🎉':ship.toFixed(2)+' €'}</span></div><div class="tf"><span class="tfl">Total</span><span class="tfv">${tot.toFixed(2)} €</span></div></div><button class="chkbtn" onclick="checkout()">Commander · ${tot.toFixed(2)} €</button>`;
+}
+function checkout(){showToast('✦ Commande transmise — merci !');cart=[];updateCount();renderCart()}
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else{const m={'p-shop':0,'p-pro':1,'p-map':2,'p-cart':3};const b=document.querySelectorAll('.nav-btn');if(m[id]!==undefined)b[m[id]].classList.add('active');}
+}
+function filterP(type,btn){
+  document.querySelectorAll('.fp').forEach(p=>p.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.pc').forEach(c=>c.style.display=(type==='all'||c.dataset.type.includes(type))?'block':'none');
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+renderCart();
+</script>
+</body>
+</html>
